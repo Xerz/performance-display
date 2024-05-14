@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "15432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  dash-app:
+    build: .
+    ports:
+      - "8050:8050"  # Ensure the application inside the container runs on port 8050.
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"  # Set to your desired admin email
+      PGADMIN_DEFAULT_PASSWORD: "admin"  # Set to your desired admin password
+    ports:
+      - "15050:80"  # pgAdmin default web port is 80, mapped to 5050 on the host.
+    depends_on:
+      - db
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin  # Persistent storage for pgAdmin data
+
+volumes:
+  pgadmin-data:  # This creates a named volume to keep pgAdmin data persistent across container restarts.
+  db-data:
