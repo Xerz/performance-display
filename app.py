@@ -11,6 +11,7 @@ app = Dash(__name__, server=server, external_stylesheets=['https://cdn.jsdelivr.
 
 engine = sqlalchemy.create_engine('postgresql://user:password@db:5432/mydatabase')
 
+
 # обновите функцию load_data, чтобы она принимала аргумент weighted
 def load_data(weighted=False):
     query = """
@@ -23,7 +24,7 @@ def load_data(weighted=False):
     if weighted:
         df['score'] *= df['weight']
     pivot_df = df.pivot(index='student_name', columns='opportunity_name', values='score')
-    pivot_df.reset_index(inplace=True)
+    pivot_df.reset_index(inplace=True) #
     return pivot_df
 
 app.layout = html.Div(children=[
